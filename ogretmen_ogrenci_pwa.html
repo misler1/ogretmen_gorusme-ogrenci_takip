@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#2563eb">
+
+  <meta charset="UTF-8">
+  <title>Öğretmen Görüşme Sistemi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-soft: #dbeafe;
+      --danger: #dc2626;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --success: #16a34a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 8px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.05);
+      border: 1px solid var(--border);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .header-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      color: var(--muted);
+    }
+
+    .badge.primary {
+      background: var(--primary-soft);
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .badge.success {
+      background: #dcfce7;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    .badge.danger {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.1s ease;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37,99,235,0.28);
+    }
+
+    .btn.secondary {
+      background: #f9fafb;
+      border-color: var(--border);
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .btn.secondary:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .btn.sm {
+      padding: 3px 10px;
+      font-size: 12px;
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: var(--danger);
+      box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+    }
+
+    .btn.danger:hover {
+      background: #b91c1c;
+    }
+
+    input[type="text"], input[type="date"], input[type="password"], select, textarea {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      background: #f9fafb;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-soft);
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .field {
+      margin-bottom: 8px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .field-row > .field {
+      flex: 1;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0 0;
+    }
+
+    .pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .pill.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      color: #1d4ed8;
+      font-weight: 500;
+    }
+
+    .layout-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.25fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .layout-top {
+      margin-bottom: 16px;
+    }
+
+    .flex {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .followup-list {
+      max-height: 260px;
+      overflow: auto;
+      margin-top: 8px;
+      padding-right: 4px;
+    }
+
+    .followup-item {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      background: #f9fafb;
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .followup-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .followup-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .followup-notes {
+      font-size: 12px;
+      color: #374151;
+      max-height: 60px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .followup-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .followup-step {
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #f3f4f6;
+    }
+
+    .followup-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .section-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 280px;
+      overflow: auto;
+    }
+
+    .list-item {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      margin-bottom: 4px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .list-item:hover {
+      background: #f3f4f6;
+      border-color: #e5e7eb;
+    }
+
+    .list-item.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    .list-item-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .list-item-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .list-item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .detail-card {
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      background: #f9fafb;
+    }
+
+    .detail-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .detail-subline {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 12px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .detail-label {
+      color: var(--muted);
+    }
+
+    .detail-value {
+      font-weight: 500;
+    }
+
+    .meeting-list {
+      margin-top: 4px;
+      max-height: 180px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .meeting-item {
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      margin-bottom: 6px;
+      background: #ffffff;
+      font-size: 12px;
+    }
+
+    .meeting-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .meeting-date {
+      font-weight: 600;
+    }
+
+    .meeting-teacher {
+      color: var(--muted);
+    }
+
+    .meeting-flags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+      font-size: 11px;
+    }
+
+    .meeting-notes {
+      font-size: 12px;
+      color: #374151;
+      white-space: pre-wrap;
+    }
+
+    .inline-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      margin-right: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .mt-4 { margin-top: 4px; }
+    .mt-6 { margin-top: 6px; }
+    .mt-8 { margin-top: 8px; }
+    .mt-10 { margin-top: 10px; }
+
+    .small-text {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 0;
+    }
+
+    /* Login ekranı */
+    .fullscreen-center {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .login-card {
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .error-text {
+      color: var(--danger);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+
+
+    /* Tema renk değişkenleri (kullanıcı tarafından ayarlanabilir) */
+    :root {
+      --top-border-color: #22c55e;
+      --top-bg-start: #f0fdf4;
+      --top-bg-end: #ffffff;
+
+      --students-border-color: #facc15;
+      --students-bg-start: #fef9c3;
+      --students-bg-end: #ffffff;
+
+      --teachers-border-color: #6366f1;
+      --teachers-bg-start: #eef2ff;
+      --teachers-bg-end: #ffffff;
+    }
+
+    .layout-top > .card {
+      border-top: 3px solid var(--top-border-color);
+      background: linear-gradient(135deg, var(--top-bg-start), var(--top-bg-end));
+    }
+
+    .layout-main > .card:first-child {
+      border-top: 3px solid var(--students-border-color);
+      background: linear-gradient(135deg, var(--students-bg-start), var(--students-bg-end));
+    }
+
+    .layout-main > .card:last-child {
+      border-top: 3px solid var(--teachers-border-color);
+      background: linear-gradient(135deg, var(--teachers-bg-start), var(--teachers-bg-end));
+    }
+
+    /* Tema modalı */
+    .theme-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .theme-modal-backdrop.open {
+      display: flex;
+    }
+    .theme-modal {
+      width: 100%;
+      max-width: 460px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 45px rgba(15,23,42,0.35);
+      padding: 16px 18px 18px 18px;
+    }
+    .theme-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .theme-modal-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .theme-modal-body {
+      font-size: 13px;
+    }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .theme-grid .field {
+      margin-bottom: 0;
+    }
+    .theme-grid label {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .theme-grid input[type="color"] {
+      width: 100%;
+      height: 34px;
+      padding: 0;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: transparent;
+      cursor: pointer;
+    }
+    .theme-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+    .btn.icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn.icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .theme-grid {
+        grid-template-columns: 1fr;
+      }
+      .theme-modal {
+        margin: 0 12px;
+      }
+    }
+
+
+    @media (max-width: 900px) {
+      .layout-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .followup-item {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+</head>
+<body>
+
+<!-- LOGIN EKRANI -->
+<div id="login-screen" class="fullscreen-center">
+  <div class="card login-card">
+    <div class="login-title">Öğretmen Görüşme Sistemi</div>
+    <div class="login-sub">Güvenli giriş / sadece senin erişimin için basit bir kilit.</div>
+    <form id="login-form">
+      <div class="field">
+        <label for="login-user">Kullanıcı adı</label>
+        <input id="login-user" type="text" autocomplete="username" placeholder="rehber">
+      </div>
+      <div class="field">
+        <label for="login-pass">Şifre</label>
+        <input id="login-pass" type="password" autocomplete="current-password" placeholder="1234">
+      </div>
+      <div id="login-error" class="error-text" style="display:none;">Kullanıcı adı veya şifre hatalı.</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+        <button class="btn" type="submit">Giriş yap</button>
+        <span class="small-text">Varsayılan: <b>rehber / 1234</b></span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ANA UYGULAMA -->
+<div id="app-screen" style="display:none;">
+  
+<div class="app-shell">
+    <div class="card">
+      <div class="header">
+        <div>
+          <div class="header-title">Öğretmen Görüşme Sistemi</div>
+          <div class="header-sub">
+            Öğrenci–öğretmen görüşmelerini, önemli takipleri ve koçluk eşleştirmelerini tek yerde tut.
+          </div>
+        </div>
+        <div>
+          <button class="btn secondary sm icon" id="open-theme-modal">
+            <!-- küçük palet ikonu -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12 3a9 9 0 0 0-9 9 9 9 0 0 0 9 9h1.5a2.5 2.5 0 0 0 2.45-3.03l-.12-.49A1.5 1.5 0 0 1 17.28 15H18a3 3 0 0 0 3-3A9 9 0 0 0 12 3Zm-4 8.25A1.25 1.25 0 1 1 9.25 10 1.25 1.25 0 0 1 8 11.25Zm2-3.5A1.25 1.25 0 1 1 11.25 7 1.25 1.25 0 0 1 10 7.75Zm4-1A1.25 1.25 0 1 1 15.25 6 1.25 1.25 0 0 1 14 6.75Zm2 4.5A1.25 1.25 0 1 1 17.25 10 1.25 1.25 0 0 1 16 11.25Z"/>
+            </svg>
+            Tema ayarları
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GÖRÜŞME TAKİP (ÖNEMLİLER LİSTESİ) -->
+    <!-- GÖRÜŞME TAKİP (ÖNEMLİLER LİSTESİ) -->
+    <div class="layout-top">
+      <div class="card" style="margin-top:12px;">
+        <div class="section-title-row">
+          <div>
+            <h2 style="font-size:16px;">Görüşmem Gereken Öğrenciler</h2>
+            <div class="small-text">
+              Öğretmen görüşmesinde <b>“Takibe al”</b> işaretlediğin öğrenciler burada listelenir.
+              Öğrenci / veli / öğretmen / idare adımlarını tek tek takip edebilirsin.
+            </div>
+          </div>
+          <div>
+            <span class="badge primary">Takip paneli</span>
+          </div>
+        </div>
+        <div id="followup-empty" class="small-text" style="margin-top:4px;">
+          Henüz önemli olarak işaretlenmiş bir kayıt yok. Bir öğretmen–öğrenci görüşmesi eklerken
+          <b>“Takibe al”</b> kutusunu işaretlersen burada görünecek.
+        </div>
+        <div id="followup-list" class="followup-list"></div>
+      </div>
+    </div>
+
+    <div class="layout-main">
+      <!-- SOL: ÖĞRENCİLER -->
+      <div class="card">
+        <div class="section-title-row">
+          <div>
+            <h2 style="font-size:15px;">Öğrenci Listesi</h2>
+            <div class="small-text">
+              Sınıf sınıf öğrencileri gör, öğrencinin tüm geçmiş görüşmelerini tek yerde izle.
+            </div>
+          </div>
+          <button class="btn secondary sm" id="toggle-add-student">Yeni öğrenci</button>
+        </div>
+
+        <div id="add-student-form" class="detail-card" style="display:none;">
+          <div class="detail-title">Yeni Öğrenci Ekle</div>
+          <div class="field">
+            <label>İsim Soyisim</label>
+            <input type="text" id="add-student-name" placeholder="Örn: Ali Veli">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Cinsiyet</label>
+              <select id="add-student-gender">
+                <option value="">Seçiniz</option>
+                <option value="KIZ">Kız</option>
+                <option value="ERKEK">Erkek</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Sınıf</label>
+              <input type="text" id="add-student-class" placeholder="Örn: 7A">
+            </div>
+          </div>
+          <div style="margin-top:6px;display:flex;justify-content:flex-end;gap:6px;">
+            <button class="btn secondary sm" id="cancel-add-student">Vazgeç</button>
+            <button class="btn sm" id="save-add-student">Kaydet</button>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <label>Sınıfa göre filtrele</label>
+          <div id="student-class-pills" class="pill-list"></div>
+        </div>
+
+        <ul id="student-list" class="list mt-4"></ul>
+
+        <div id="student-detail" class="detail-card" style="display:none;"></div>
+      </div>
+
+      <!-- SAĞ: ÖĞRETMENLER -->
+      <div class="card">
+        <div class="section-title-row">
+          <div>
+            <h2 style="font-size:15px;">Öğretmen Listesi</h2>
+            <div class="small-text">
+              Öğretmen–öğrenci görüşmelerini buradan gir. Kayıtlar otomatik olarak öğrenci sayfasına da düşer.
+            </div>
+          </div>
+          <button class="btn secondary sm" id="toggle-add-teacher">Yeni öğretmen</button>
+        </div>
+
+        <div id="add-teacher-form" class="detail-card" style="display:none;">
+          <div class="detail-title">Yeni Öğretmen Ekle</div>
+          <div class="field">
+            <label>İsim Soyisim</label>
+            <input type="text" id="add-teacher-name" placeholder="Örn: Ayşe Öğretmen">
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Branş</label>
+              <input type="text" id="add-teacher-branch" placeholder="Örn: Matematik">
+            </div>
+            <div class="field">
+              <label>Rol</label>
+              <select id="add-teacher-role">
+                <option value="">Yok</option>
+                <option value="homeroom">Sınıf öğretmeni</option>
+                <option value="coach">Koç</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Sınıf (sınıf öğretmenliği / koçluk grubu)</label>
+            <input type="text" id="add-teacher-role-class" placeholder="Örn: 7B veya 8. sınıflar">
+          </div>
+          <div style="margin-top:6px;display:flex;justify-content:flex-end;gap:6px;">
+            <button class="btn secondary sm" id="cancel-add-teacher">Vazgeç</button>
+            <button class="btn sm" id="save-add-teacher">Kaydet</button>
+          </div>
+        </div>
+
+        <ul id="teacher-list" class="list mt-4"></ul>
+
+        <div id="teacher-detail" class="detail-card" style="display:none;"></div>
+
+        <div id="meeting-form-container" class="detail-card" style="display:none;">
+          <div class="detail-title">Öğretmen–Öğrenci Görüşmesi Ekle</div>
+          <div class="detail-subline" id="meeting-form-title"></div>
+          <form id="meeting-form">
+            <div class="field-row">
+              <div class="field">
+                <label>Tarih</label>
+                <input type="date" id="meeting-date">
+              </div>
+              <div class="field">
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="meeting-important">
+                  <span>Takibe al (önemli konu)</span>
+                </label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Görüşme notu</label>
+              <textarea id="meeting-notes" placeholder="Örn: Öğretmen sosyal ilişkilerde zorlandığını belirtti, veli ile görüşülecek..."></textarea>
+            </div>
+            <div class="field">
+              <label>Bu öğrenciyle hangi paydaşlarla ayrıca çalışma / görüşme yapman gerekiyor?</label>
+              <div class="mt-4">
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-ogrenci"> Öğrenci
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-veli"> Veli
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-ogretmen"> Öğretmen
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-idare"> İdare
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-diger"> Diğer
+                </label>
+              </div>
+            </div>
+            <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:6px;">
+              <button type="button" class="btn secondary sm" id="cancel-meeting">Vazgeç</button>
+              <button type="submit" class="btn sm">Kaydet</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  BASİT GİRİŞ BİLGİLERİ
+  İstersen burayı değiştir:
+*/
+const LOGIN_USER = "musa.isler";
+const LOGIN_PASS = "Palet+987";
+
+/*
+  LOCAL STORAGE ANAHTARLARI
+*/
+const LS_KEY_STUDENTS = "ogrsys_students";
+const LS_KEY_TEACHERS = "ogrsys_teachers";
+const LS_KEY_MEETINGS = "ogrsys_meetings";
+const LS_KEY_COACH = "ogrsys_coachAssignments";
+const LS_KEY_LOGIN = "ogrsys_loggedIn";;
+
+/*
+  FIREBASE BAĞLANTISI (bulut senkronizasyonu)
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyBl_SRAk4j9jJqEwe9RCvmI_iXqal1Z-vI",
+  authDomain: "rehberlik-sistemi.firebaseapp.com",
+  projectId: "rehberlik-sistemi",
+  storageBucket: "rehberlik-sistemi.firebasestorage.app",
+  messagingSenderId: "376612659167",
+  appId: "1:376612659167:web:ffa97f33d10046a9642e6a"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Bulut senkronizasyonu için yardımcı flag'ler
+let cloudUnsubscribe = null;
+let isPushingToCloud = false;
+
+// Firestore'daki tekil durum dokümanı (1-A modeli)
+function getStateDocRef() {
+  return db
+    .collection("okullar").doc("okul1")
+    .collection("kullanicilar").doc("musa_isler");
+}
+
+// Tema ayarları için localStorage anahtarı
+const THEME_KEY = "ogrsys_theme_colors";
+
+/*
+  GLOBAL DURUM
+*/
+let students = [];
+let teachers = [];
+let meetings = [];
+let coachAssignments = [];
+
+let currentStudentId = null;
+let currentStudentClassFilter = null;
+
+let currentTeacherId = null;
+let currentTeacherClassFilter = null;
+
+let currentMeetingStudentId = null;
+let currentMeetingTeacherId = null;
+
+/* Yardımcılar */
+
+
+function saveStateLocalOnly() {
+  try {
+    localStorage.setItem(LS_KEY_STUDENTS, JSON.stringify(students));
+    localStorage.setItem(LS_KEY_TEACHERS, JSON.stringify(teachers));
+    localStorage.setItem(LS_KEY_MEETINGS, JSON.stringify(meetings));
+    localStorage.setItem(LS_KEY_COACH, JSON.stringify(coachAssignments));
+  } catch (e) {
+    console.error("Yerel veriler kaydedilirken hata:", e);
+  }
+}
+
+// Hem yerel tarayıcıya hem Firestore'a yazar
+function saveState() {
+  saveStateLocalOnly();
+  saveStateCloud();
+}
+
+// Firestore'a yazma
+function saveStateCloud() {
+  if (!db) return;
+  const docRef = getStateDocRef();
+  isPushingToCloud = true;
+
+  return docRef.set(
+    {
+      students,
+      teachers,
+      meetings,
+      coachAssignments,
+      updatedAt: new Date().toISOString()
+    },
+    { merge: true }
+  ).then(() => {
+    setTimeout(() => { isPushingToCloud = false; }, 200);
+  }).catch((err) => {
+    console.error("Buluta kaydedilirken hata:", err);
+    isPushingToCloud = false;
+  });
+}
+
+// Firestore'dan gerçek zamanlı okuma
+function subscribeToCloudState() {
+  const docRef = getStateDocRef();
+  cloudUnsubscribe = docRef.onSnapshot((snap) => {
+    if (!snap.exists) {
+      // İlk kez kullanıyorsan, yereldeki veriler buluta yazılacak
+      saveStateCloud();
+      return;
+    }
+    if (isPushingToCloud) {
+      // Az önce bizim yazdığımız değişiklik, tekrar işleme
+      return;
+    }
+    const data = snap.data() || {};
+    students = Array.isArray(data.students) ? data.students : [];
+    teachers = Array.isArray(data.teachers) ? data.teachers : [];
+    meetings = Array.isArray(data.meetings) ? data.meetings : [];
+    coachAssignments = Array.isArray(data.coachAssignments) ? data.coachAssignments : [];
+
+    // Tarayıcı cache'ini güncelle
+    saveStateLocalOnly();
+    // Ekranı yenile
+    renderAll();
+  }, (err) => {
+    console.error("Buluttan veriler okunurken hata:", err);
+  });
+}
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(LS_KEY_STUDENTS);
+    const t = localStorage.getItem(LS_KEY_TEACHERS);
+    const m = localStorage.getItem(LS_KEY_MEETINGS);
+    const c = localStorage.getItem(LS_KEY_COACH);
+    students = s ? JSON.parse(s) : [];
+    teachers = t ? JSON.parse(t) : [];
+    meetings = m ? JSON.parse(m) : [];
+    coachAssignments = c ? JSON.parse(c) : [];
+  } catch (e) {
+    console.error("Yerel veriler okunurken hata:", e);
+    students = [];
+    teachers = [];
+    meetings = [];
+    coachAssignments = [];
+  }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  const day = String(d.getDate()).padStart(2,"0");
+  const month = String(d.getMonth()+1).padStart(2,"0");
+  const year = d.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
+function getStudentById(id) {
+  return students.find(s => s.id === id) || null;
+}
+
+function getTeacherById(id) {
+  return teachers.find(t => t.id === id) || null;
+}
+
+function getTeacherLabel(t) {
+  if (!t) return "-";
+  const branch = t.branch ? t.branch : "";
+  let role = "";
+  if (t.roleType === "homeroom") {
+    role = t.roleClass ? `Sınıf Öğrt. (${t.roleClass})` : "Sınıf Öğretmeni";
+  } else if (t.roleType === "coach") {
+    role = t.roleClass ? `Koç (${t.roleClass})` : "Koç Öğretmen";
+  }
+  return branch && role ? `${branch} • ${role}` : (branch || role || "");
+}
+
+/* CSV PARSING */
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+  return lines.map(line => {
+    // Hem ; hem , ile ayrılmış olma ihtimaline göre
+    const parts = line.split(/;|,/).map(p => p.trim());
+    return parts;
+  });
+}
+
+function importStudentCSV(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return;
+  // ilk satır başlık
+  const dataRows = rows.slice(1);
+  let idCounter = 1;
+  students = dataRows
+    .filter(r => r[0])
+    .map(r => ({
+      id: idCounter++,
+      name: r[0] || "",
+      gender: r[1] || "",
+      className: r[2] || ""
+    }));
+  // Yeni veri geldiğinde mevcut görüşmeler ve koçluk eşleştirmeleri karışmasın diye sıfırlıyoruz:
+  meetings = [];
+  coachAssignments = [];
+  saveState();
+  currentStudentId = null;
+  currentStudentClassFilter = null;
+  renderAll();
+}
+
+function importTeacherCSV(text) {
+  const rows = parseCSV(text);
+  if (!rows.length) return;
+  const dataRows = rows.slice(1);
+  let idCounter = 1;
+  const coachNames = ["ŞEHMUS SAĞLAMER","BÜŞRA ÇOBAN","SEVGİ CENGİZ","ÖZGE DEMİR"];
+  teachers = dataRows
+    .filter(r => r[0])
+    .map(r => {
+      const name = r[0] || "";
+      const branch = r[1] || "";
+      const varCol = (r[2] || "").toUpperCase();
+      const cls = r[3] || "";
+      const hasRole = varCol === "VAR";
+      let roleType = null;
+      if (hasRole) {
+        if (coachNames.includes(name.toUpperCase())) {
+          roleType = "coach";
+        } else {
+          roleType = cls ? "homeroom" : "coach";
+        }
+      }
+      return {
+        id: idCounter++,
+        name,
+        branch,
+        hasRole,
+        roleType,
+        roleClass: cls
+      };
+    });
+  meetings = [];
+  coachAssignments = [];
+  saveState();
+  currentTeacherId = null;
+  currentTeacherClassFilter = null;
+  renderAll();
+}
+
+/* ÖĞRENCİLER UI */
+
+function renderStudentClassPills() {
+  const cont = document.getElementById("student-class-pills");
+  cont.innerHTML = "";
+  if (!students.length) {
+    cont.innerHTML = '<span class="small-text">Önce öğrenci CSV dosyasını yükleyin.</span>';
+    return;
+  }
+  const classes = Array.from(new Set(students.map(s => (s.className || "").trim()).filter(Boolean))).sort();
+  const allPill = document.createElement("span");
+  allPill.className = "pill" + (!currentStudentClassFilter ? " active" : "");
+  allPill.textContent = "Tümü";
+  allPill.onclick = () => {
+    currentStudentClassFilter = null;
+    renderStudentClassPills();
+    renderStudentList();
+  };
+  cont.appendChild(allPill);
+
+  classes.forEach(cls => {
+    const pill = document.createElement("span");
+    pill.className = "pill" + (currentStudentClassFilter === cls ? " active" : "");
+    pill.textContent = cls;
+    pill.onclick = () => {
+      currentStudentClassFilter = cls;
+      renderStudentClassPills();
+      renderStudentList();
+    };
+    cont.appendChild(pill);
+  });
+}
+
+function renderStudentList() {
+  const ul = document.getElementById("student-list");
+  ul.innerHTML = "";
+
+  if (!students.length) {
+    ul.innerHTML = '<li class="small-text">Öğrenci listesi yüklenmedi. Üstten CSV dosyası seçin.</li>';
+    document.getElementById("student-detail").style.display = "none";
+    return;
+  }
+
+  let list = students.slice();
+  if (currentStudentClassFilter) {
+    list = list.filter(s => s.className === currentStudentClassFilter);
+  }
+
+  list.sort((a,b) => {
+    if (a.className === b.className) return a.name.localeCompare(b.name, "tr");
+    return (a.className || "").localeCompare(b.className || "", "tr");
+  });
+
+  list.forEach(s => {
+    const li = document.createElement("li");
+    li.className = "list-item" + (currentStudentId === s.id ? " active" : "");
+    const title = document.createElement("div");
+    title.className = "list-item-title";
+    title.textContent = s.name;
+
+    const sub = document.createElement("div");
+    sub.className = "list-item-sub";
+    sub.textContent = `${s.className || "-"} • ${s.gender || ""}`;
+
+    const tags = document.createElement("div");
+    tags.className = "list-item-tags";
+
+    const meetingsCount = meetings.filter(m => m.studentId === s.id).length;
+    if (meetingsCount) {
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = `${meetingsCount} kayıt`;
+      tags.appendChild(badge);
+    }
+
+    li.onclick = () => openStudentDetail(s.id);
+
+    li.appendChild(title);
+    li.appendChild(sub);
+    if (tags.childNodes.length) li.appendChild(tags);
+    ul.appendChild(li);
+  });
+}
+
+function openStudentDetail(studentId) {
+  currentStudentId = studentId;
+  renderStudentList();
+
+  const s = getStudentById(studentId);
+  const box = document.getElementById("student-detail");
+  if (!s) {
+    box.style.display = "none";
+    return;
+  }
+  box.style.display = "block";
+
+  const studentMeetings = meetings
+    .filter(m => m.studentId === studentId)
+    .slice()
+    .sort((a,b) => (b.date || "").localeCompare(a.date || ""));
+
+  let coachTeacher = null;
+  const coachRel = coachAssignments.find(ca => ca.studentId === studentId);
+  if (coachRel) {
+    coachTeacher = getTeacherById(coachRel.teacherId);
+  }
+
+  let infoHtml = `
+    <div class="detail-title">${s.name}</div>
+    <div class="detail-subline">Öğrenci detayı ve tüm geçmiş görüşmeler</div>
+    <div class="detail-grid">
+      <div><span class="detail-label">Sınıf:</span> <span class="detail-value">${s.className || "-"}</span></div>
+      <div><span class="detail-label">Cinsiyet:</span> <span class="detail-value">${s.gender || "-"}</span></div>
+      <div><span class="detail-label">Koç Öğretmen:</span> <span class="detail-value">${coachTeacher ? coachTeacher.name : "-"}</span></div>
+      <div><span class="detail-label">Toplam Görüşme:</span> <span class="detail-value">${studentMeetings.length}</span></div>
+    </div>
+    <div class="divider"></div>
+    <div class="small-text"><b>Görüşme geçmişi</b></div>
+  `;
+
+  if (!studentMeetings.length) {
+    infoHtml += `<div class="small-text mt-4">Bu öğrenci için henüz kayıtlı bir görüşme yok.</div>`;
+  } else {
+    infoHtml += `<div class="meeting-list">`;
+    studentMeetings.forEach(m => {
+      const t = getTeacherById(m.teacherId);
+      const flags = [];
+      if (m.important) flags.push(`<span class="badge danger">Takipte</span>`);
+      const fuLabelMap = {
+        ogrenci: "Öğrenci",
+        veli: "Veli",
+        ogretmen: "Öğretmen",
+        idare: "İdare",
+        diger: "Diğer"
+      };
+      const fuList = Object.keys(m.followUps || {}).filter(k => m.followUps[k].needed);
+      if (fuList.length) {
+        flags.push(`<span class="badge primary">Adımlar: ${fuList.map(k => fuLabelMap[k] || k).join(", ")}</span>`);
+      }
+      infoHtml += `
+        <div class="meeting-item">
+          <div class="meeting-head">
+            <div class="meeting-date">${formatDate(m.date)}</div>
+            <div class="meeting-teacher">${t ? t.name : "-"}</div>
+          </div>
+          <div class="meeting-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
+          ${flags.length ? `<div class="meeting-flags mt-4">${flags.join(" ")}</div>` : ""}
+        </div>
+      `;
+    });
+    infoHtml += `</div>`;
+  }
+
+  box.innerHTML = infoHtml;
+}
+
+/* ÖĞRETMENLER UI */
+
+function renderTeacherList() {
+  const ul = document.getElementById("teacher-list");
+  ul.innerHTML = "";
+
+  if (!teachers.length) {
+    ul.innerHTML = '<li class="small-text">Öğretmen listesi yüklenmedi. Üstten CSV dosyası seçin.</li>';
+    document.getElementById("teacher-detail").style.display = "none";
+    document.getElementById("meeting-form-container").style.display = "none";
+    return;
+  }
+
+  const list = teachers.slice().sort((a,b) => a.name.localeCompare(b.name, "tr"));
+  list.forEach(t => {
+    const li = document.createElement("li");
+    li.className = "list-item" + (currentTeacherId === t.id ? " active" : "");
+
+    const title = document.createElement("div");
+    title.className = "list-item-title";
+    title.textContent = t.name;
+
+    const sub = document.createElement("div");
+    sub.className = "list-item-sub";
+    sub.textContent = getTeacherLabel(t) || "-";
+
+    const tags = document.createElement("div");
+    tags.className = "list-item-tags";
+
+    const count = meetings.filter(m => m.teacherId === t.id).length;
+    if (count) {
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = `${count} görüşme`;
+      tags.appendChild(badge);
+    }
+
+    if (t.roleType === "coach") {
+      const cBadge = document.createElement("span");
+      cBadge.className = "badge success";
+      const asgCount = coachAssignments.filter(ca => ca.teacherId === t.id).length;
+      cBadge.textContent = `Koç (${asgCount} öğrenci)`;
+      tags.appendChild(cBadge);
+    }
+
+    li.onclick = () => openTeacherDetail(t.id);
+
+    li.appendChild(title);
+    li.appendChild(sub);
+    if (tags.childNodes.length) li.appendChild(tags);
+    ul.appendChild(li);
+  });
+}
+
+function renderTeacherDetailStudents(t) {
+  const containerId = "teacher-student-section";
+  let section = document.getElementById(containerId);
+  if (!section) return;
+
+  if (!students.length) {
+    section.innerHTML = `<div class="small-text">Öğrenci listesi yok. Önce öğrenci CSV dosyasını yükleyin.</div>`;
+    return;
+  }
+
+  const classes = Array.from(new Set(students.map(s => (s.className || "").trim()).filter(Boolean))).sort();
+  if (!classes.length) {
+    section.innerHTML = `<div class="small-text">Öğrenci sınıf bilgileri boş.</div>`;
+    return;
+  }
+  if (!currentTeacherClassFilter) currentTeacherClassFilter = classes[0];
+
+  let html = `
+    <div class="field-row" style="align-items:flex-end;">
+      <div class="field">
+        <label>Görüşme için sınıf seç</label>
+        <select id="teacher-class-select">
+          ${classes.map(cls => `<option value="${cls}" ${cls === currentTeacherClassFilter ? "selected":""}>${cls}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field">
+        <span class="small-text">
+          Seçilen sınıftaki öğrencileri listeden seçip <b>görüşme ekleyebilirsin</b>.
+        </span>
+      </div>
+    </div>
+    <div class="meeting-list" style="margin-top:6px; max-height:180px;">
+  `;
+
+  const list = students
+    .filter(s => s.className === currentTeacherClassFilter)
+    .slice()
+    .sort((a,b) => a.name.localeCompare(b.name, "tr"));
+
+  if (!list.length) {
+    html += `<div class="small-text">Bu sınıfta öğrenci yok.</div>`;
+  } else {
+    list.forEach(s => {
+      const mCount = meetings.filter(m => m.studentId === s.id && m.teacherId === t.id).length;
+      html += `
+        <div class="meeting-item" style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+          <div>
+            <div class="meeting-date">${s.name}</div>
+            <div class="meeting-teacher small-text">${s.className || ""} • ${s.gender || ""} ${mCount ? "• " + mCount + " kayıt" : ""}</div>
+          </div>
+          <button class="btn sm" onclick="openMeetingForm(${s.id}, ${t.id}); return false;">Görüşme ekle</button>
+        </div>
+      `;
+    });
+  }
+
+  html += `</div>`;
+  section.innerHTML = html;
+
+  const select = document.getElementById("teacher-class-select");
+  if (select) {
+    select.onchange = (e) => {
+      currentTeacherClassFilter = e.target.value;
+      renderTeacherDetailStudents(t);
+    };
+  }
+}
+
+function renderTeacherCoachSection(t) {
+  const containerId = "teacher-coach-section";
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+
+  if (t.roleType !== "coach") {
+    cont.innerHTML = "";
+    return;
+  }
+
+  if (!students.length) {
+    cont.innerHTML = `<div class="small-text mt-4">Koçluk öğrencileri için önce öğrenci listesi yükleyin.</div>`;
+    return;
+  }
+
+  const myAssignments = coachAssignments
+    .filter(ca => ca.teacherId === t.id)
+    .map(ca => getStudentById(ca.studentId))
+    .filter(Boolean)
+    .sort((a,b) => a.name.localeCompare(b.name, "tr"));
+
+  const classes = Array.from(new Set(students.map(s => (s.className || "").trim()).filter(Boolean))).sort();
+
+  let html = `
+    <div class="divider"></div>
+    <div class="small-text"><b>Koçluk Öğrencileri</b></div>
+    <div class="field-row mt-4" style="align-items:flex-end;">
+      <div class="field">
+        <label>Sınıf seç</label>
+        <select id="coach-class-select">
+          ${classes.map(cls => `<option value="${cls}">${cls}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field">
+        <label>Öğrenci seç</label>
+        <select id="coach-student-select"></select>
+      </div>
+      <div class="field" style="flex:0 0 auto;">
+        <button class="btn sm" id="coach-add-btn">Koçluğa ekle</button>
+      </div>
+    </div>
+  `;
+
+  if (!myAssignments.length) {
+    html += `<div class="small-text mt-4">Henüz bu öğretmene atanmış koçluk öğrencisi yok.</div>`;
+  } else {
+    html += `<div class="meeting-list mt-4">`;
+    myAssignments.forEach(s => {
+      html += `
+        <div class="meeting-item" style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+          <div>
+            <div class="meeting-date">${s.name}</div>
+            <div class="meeting-teacher small-text">${s.className || ""}</div>
+          </div>
+          <button class="btn secondary sm" onclick="removeCoachAssignment(${t.id}, ${s.id}); return false;">Kaldır</button>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  cont.innerHTML = html;
+
+  const classSelect = document.getElementById("coach-class-select");
+  const studentSelect = document.getElementById("coach-student-select");
+  const btn = document.getElementById("coach-add-btn");
+
+  function refreshStudentOptions() {
+    const cls = classSelect.value;
+    const list = students
+      .filter(s => !coachAssignments.some(ca => ca.teacherId === t.id && ca.studentId === s.id))
+      .filter(s => !cls || s.className === cls)
+      .slice()
+      .sort((a,b) => a.name.localeCompare(b.name, "tr"));
+    studentSelect.innerHTML = list.map(s => `<option value="${s.id}">${s.name}</option>`).join("");
+  }
+
+  classSelect.onchange = refreshStudentOptions;
+  refreshStudentOptions();
+
+  btn.onclick = () => {
+    const sId = parseInt(studentSelect.value, 10);
+    if (!sId) return;
+    if (!coachAssignments.some(ca => ca.teacherId === t.id && ca.studentId === sId)) {
+      coachAssignments.push({ teacherId: t.id, studentId: sId });
+      saveState();
+      renderTeacherCoachSection(t);
+      if (currentStudentId === sId) {
+        openStudentDetail(sId);
+      }
+    }
+  };
+}
+
+function removeCoachAssignment(teacherId, studentId) {
+  coachAssignments = coachAssignments.filter(ca => !(ca.teacherId === teacherId && ca.studentId === studentId));
+  saveState();
+  if (currentTeacherId === teacherId) {
+    const t = getTeacherById(teacherId);
+    if (t) renderTeacherCoachSection(t);
+  }
+  if (currentStudentId === studentId) {
+    openStudentDetail(studentId);
+  }
+}
+
+function openTeacherDetail(teacherId) {
+  currentTeacherId = teacherId;
+  renderTeacherList();
+
+  const t = getTeacherById(teacherId);
+  const box = document.getElementById("teacher-detail");
+  if (!t) {
+    box.style.display = "none";
+    document.getElementById("meeting-form-container").style.display = "none";
+    return;
+  }
+  box.style.display = "block";
+
+  const tMeetings = meetings
+    .filter(m => m.teacherId === teacherId)
+    .slice()
+    .sort((a,b) => (b.date || "").localeCompare(a.date || ""));
+
+  let html = `
+    <div class="detail-title">${t.name}</div>
+    <div class="detail-subline">${getTeacherLabel(t) || "Öğretmen detayı"}</div>
+    <div class="detail-grid">
+      <div><span class="detail-label">Branş:</span> <span class="detail-value">${t.branch || "-"}</span></div>
+      <div><span class="detail-label">Görüşme Sayısı:</span> <span class="detail-value">${tMeetings.length}</span></div>
+      <div><span class="detail-label">Sınıf Öğretmenliği / Koçluk:</span> <span class="detail-value">${t.hasRole ? "Var" : "Yok"}</span></div>
+      <div><span class="detail-label">Sınıf / Grup:</span> <span class="detail-value">${t.roleClass || "-"}</span></div>
+    </div>
+
+    <div id="teacher-student-section" class="mt-4"></div>
+    <div id="teacher-coach-section" class="mt-4"></div>
+
+    <div class="divider"></div>
+    <div class="small-text"><b>Bu öğretmenle yapılan son görüşmeler</b></div>
+  `;
+
+  if (!tMeetings.length) {
+    html += `<div class="small-text mt-4">Bu öğretmenle yapılmış kayıtlı bir görüşme yok.</div>`;
+  } else {
+    html += `<div class="meeting-list">`;
+    tMeetings.forEach(m => {
+      const s = getStudentById(m.studentId);
+      const fuPending = Object.values(m.followUps || {}).some(fu => fu.needed && !fu.done);
+      html += `
+        <div class="meeting-item">
+          <div class="meeting-head">
+            <div class="meeting-date">${formatDate(m.date)} • ${s ? s.name : "-"}</div>
+            <div class="meeting-teacher">${m.important ? '<span class="badge danger">Takipte</span>' : ''}</div>
+          </div>
+          <div class="meeting-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
+          ${fuPending ? '<div class="meeting-flags mt-4"><span class="badge danger">Açık adım var</span></div>' : ""}
+        </div>
+      `;
+    });
+    html += `</div>`;
+  }
+
+  box.innerHTML = html;
+  renderTeacherDetailStudents(t);
+  renderTeacherCoachSection(t);
+}
+
+/* GÖRÜŞME FORMU */
+
+function openMeetingForm(studentId, teacherId) {
+  currentMeetingStudentId = studentId;
+  currentMeetingTeacherId = teacherId;
+
+  const s = getStudentById(studentId);
+  const t = getTeacherById(teacherId);
+
+  const cont = document.getElementById("meeting-form-container");
+  const titleEl = document.getElementById("meeting-form-title");
+  cont.style.display = "block";
+
+  titleEl.textContent = `${t ? t.name : "-"} ↔ ${s ? s.name : "-"}`;
+
+  const dateInput = document.getElementById("meeting-date");
+  if (!dateInput.value) {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2,"0");
+    const d = String(today.getDate()).padStart(2,"0");
+    dateInput.value = `${y}-${m}-${d}`;
+  }
+
+  document.getElementById("meeting-notes").value = "";
+  document.getElementById("meeting-important").checked = false;
+  ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
+    const el = document.getElementById("fu-"+k);
+    if (el) el.checked = false;
+  });
+
+  // Öğrenci detayı açık ise güncelle
+  if (currentStudentId === studentId) {
+    openStudentDetail(studentId);
+  }
+}
+
+/* TAKİP LİSTESİ */
+
+function renderFollowupList() {
+  const cont = document.getElementById("followup-list");
+  const empty = document.getElementById("followup-empty");
+  cont.innerHTML = "";
+
+  if (!meetings.length) {
+    empty.style.display = "block";
+    return;
+  }
+
+  const fuLabelMap = {
+    ogrenci: "Öğrenci",
+    veli: "Veli",
+    ogretmen: "Öğretmen",
+    idare: "İdare",
+    diger: "Diğer"
+  };
+
+  const list = meetings.filter(m => {
+    if (!m.important) return false;
+    const fu = m.followUps || {};
+    return Object.values(fu).some(f => f.needed && !f.done);
+  }).sort((a,b) => (a.date || "").localeCompare(b.date || ""));
+
+  if (!list.length) {
+    empty.style.display = "block";
+    return;
+  }
+  empty.style.display = "none";
+
+  list.forEach(m => {
+    const s = getStudentById(m.studentId);
+    const t = getTeacherById(m.teacherId);
+    const fu = m.followUps || {};
+
+    const item = document.createElement("div");
+    item.className = "followup-item";
+
+    const left = document.createElement("div");
+    left.innerHTML = `
+      <div class="followup-title">${s ? s.name : "-"}</div>
+      <div class="followup-sub">${formatDate(m.date)} • ${t ? t.name : "Öğretmen yok"}</div>
+      <div class="followup-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
+    `;
+
+    const mid = document.createElement("div");
+    const stepsDiv = document.createElement("div");
+    stepsDiv.className = "followup-steps";
+
+    Object.keys(fu).forEach(key => {
+      const step = fu[key];
+      if (!step.needed) return;
+      const lab = document.createElement("label");
+      lab.className = "followup-step";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!step.done;
+      cb.onchange = () => {
+        step.done = cb.checked;
+        saveState();
+        renderFollowupList();
+        if (currentStudentId === m.studentId) {
+          openStudentDetail(m.studentId);
+        }
+      };
+      const span = document.createElement("span");
+      span.textContent = fuLabelMap[key] || key;
+      lab.appendChild(cb);
+      lab.appendChild(span);
+      stepsDiv.appendChild(lab);
+    });
+
+    if (!stepsDiv.childNodes.length) {
+      stepsDiv.innerHTML = '<span class="small-text">Seçili adım yok.</span>';
+    }
+
+    mid.appendChild(stepsDiv);
+
+    const right = document.createElement("div");
+    right.className = "followup-actions";
+    const btnDone = document.createElement("button");
+    btnDone.className = "btn sm";
+    btnDone.textContent = "Tüm adımlar tamamlandı";
+    btnDone.onclick = () => {
+      Object.keys(fu).forEach(k => {
+        if (fu[k].needed) fu[k].done = true;
+      });
+      saveState();
+      renderFollowupList();
+      if (currentStudentId === m.studentId) {
+        openStudentDetail(m.studentId);
+      }
+    };
+
+    const btnGo = document.createElement("button");
+    btnGo.className = "btn secondary sm";
+    btnGo.textContent = "Öğrenci sayfası";
+    btnGo.onclick = () => {
+      if (s) openStudentDetail(s.id);
+      window.scrollTo({top:0, behavior:"smooth"});
+    };
+
+    right.appendChild(btnDone);
+    right.appendChild(btnGo);
+
+    item.appendChild(left);
+    item.appendChild(mid);
+    item.appendChild(right);
+    cont.appendChild(item);
+  });
+}
+
+/* OLAYLAR ve BAŞLATMA */
+
+
+function applyThemeFromStorage() {
+  try {
+    const stored = localStorage.getItem(THEME_KEY);
+    let config;
+    if (stored) {
+      config = JSON.parse(stored);
+    } else {
+      config = {
+        top: "#22c55e",
+        students: "#facc15",
+        teachers: "#6366f1"
+      };
+      localStorage.setItem(THEME_KEY, JSON.stringify(config));
+    }
+
+    const topInput = document.getElementById("color-top-main");
+    const stuInput = document.getElementById("color-students-main");
+    const teaInput = document.getElementById("color-teachers-main");
+    if (topInput) topInput.value = config.top;
+    if (stuInput) stuInput.value = config.students;
+    if (teaInput) teaInput.value = config.teachers;
+
+    applyThemeColors(config);
+  } catch (e) {
+    console.error("Tema ayarları okunurken hata:", e);
+  }
+}
+
+function hexToRgba(hex, alpha) {
+  if (!hex) return "rgba(255,255,255," + alpha + ")";
+  let h = hex.replace("#", "");
+  if (h.length === 3) {
+    h = h.split("").map(x => x + x).join("");
+  }
+  const num = parseInt(h, 16);
+  const r = (num >> 16) & 255;
+  const g = (num >> 8) & 255;
+  const b = num & 255;
+  return "rgba(" + r + "," + b + "," + g + "," + alpha + ")";
+}
+
+function applyThemeColors(config) {
+  const root = document.documentElement;
+  const top = config.top || "#22c55e";
+  const stu = config.students || "#facc15";
+  const tea = config.teachers || "#6366f1";
+
+  root.style.setProperty("--top-border-color", top);
+  root.style.setProperty("--top-bg-start", hexToRgba(top, 0.08));
+  root.style.setProperty("--top-bg-end", "#ffffff");
+
+  root.style.setProperty("--students-border-color", stu);
+  root.style.setProperty("--students-bg-start", hexToRgba(stu, 0.1));
+  root.style.setProperty("--students-bg-end", "#ffffff");
+
+  root.style.setProperty("--teachers-border-color", tea);
+  root.style.setProperty("--teachers-bg-start", hexToRgba(tea, 0.08));
+  root.style.setProperty("--teachers-bg-end", "#ffffff");
+}
+
+function initThemeControls() {
+  const modal = document.getElementById("theme-modal");
+  const openBtn = document.getElementById("open-theme-modal");
+  const closeBtn = document.getElementById("close-theme-modal");
+  const resetBtn = document.getElementById("reset-theme");
+  const topInput = document.getElementById("color-top-main");
+  const stuInput = document.getElementById("color-students-main");
+  const teaInput = document.getElementById("color-teachers-main");
+  if (!modal || !openBtn || !closeBtn || !topInput || !stuInput || !teaInput) return;
+
+  const handler = () => {
+    const config = {
+      top: topInput.value || "#22c55e",
+      students: stuInput.value || "#facc15",
+      teachers: teaInput.value || "#6366f1"
+    };
+    localStorage.setItem(THEME_KEY, JSON.stringify(config));
+    applyThemeColors(config);
+  };
+
+  topInput.addEventListener("input", handler);
+  stuInput.addEventListener("input", handler);
+  teaInput.addEventListener("input", handler);
+
+  openBtn.addEventListener("click", () => {
+    modal.classList.add("open");
+  });
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("open");
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("open");
+    }
+  });
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      const config = {
+        top: "#22c55e",
+        students: "#facc15",
+        teachers: "#6366f1"
+      };
+      localStorage.setItem(THEME_KEY, JSON.stringify(config));
+      if (topInput) topInput.value = config.top;
+      if (stuInput) stuInput.value = config.students;
+      if (teaInput) teaInput.value = config.teachers;
+      applyThemeColors(config);
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // login check
+  const logged = false; // her açılışta şifre sorulsun
+
+  const loginForm = document.getElementById("login-form");
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const u = document.getElementById("login-user").value.trim();
+    const p = document.getElementById("login-pass").value.trim();
+    const err = document.getElementById("login-error");
+    if (u === LOGIN_USER && p === LOGIN_PASS) {
+    // localStorage.setItem(LS_KEY_LOGIN, "1"); // artık sürekli şifre sorulsun diye iptal edildi
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app-screen").style.display = "block";
+    // Önce yereldeki verileri yükle
+    loadState();
+    renderAll();
+    // Tema ayarlarını uygula ve kontrolleri bağla
+    applyThemeFromStorage();
+    initThemeControls();
+    // Firestore'dan gerçek zamanlı senkronizasyonu başlat
+    subscribeToCloudState();
+  } else {
+      err.style.display = "block";
+    }
+  });
+
+  // CSV yükleme butonları (devre dışı bırakıldı)
+  // const studentFileInput = document.getElementById("student-file");
+  // const teacherFileInput = document.getElementById("teacher-file");
+  // document.getElementById("student-file-btn").onclick = () => studentFileInput.click();
+  // document.getElementById("teacher-file-btn").onclick = () => studentFileInput.click();
+
+  // studentFileInput.addEventListener("change", (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   const reader = new FileReader();
+  //   reader.onload = (ev) => {
+  //     importStudentCSV(ev.target.result);
+  //   };
+  //   reader.readAsText(file, "utf-8");
+  // });
+
+  // teacherFileInput.addEventListener("change", (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+  //   const reader = new FileReader();
+  //   reader.onload = (ev) => {
+  //     importTeacherCSV(ev.target.result);
+  //   };
+  //   reader.readAsText(file, "utf-8");
+  // });
+
+  // Yeni öğrenci ekleme
+  document.getElementById("toggle-add-student").onclick = () => {
+    const box = document.getElementById("add-student-form");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+  };
+  document.getElementById("cancel-add-student").onclick = () => {
+    document.getElementById("add-student-form").style.display = "none";
+  };
+  document.getElementById("save-add-student").onclick = () => {
+    const name = document.getElementById("add-student-name").value.trim();
+    const gender = document.getElementById("add-student-gender").value;
+    const cls = document.getElementById("add-student-class").value.trim();
+    if (!name) {
+      alert("Öğrenci adı boş olamaz.");
+      return;
+    }
+    const maxId = students.reduce((max,s) => Math.max(max, s.id || 0), 0);
+    students.push({
+      id: maxId + 1,
+      name,
+      gender,
+      className: cls
+    });
+    saveState();
+    document.getElementById("add-student-name").value = "";
+    document.getElementById("add-student-gender").value = "";
+    document.getElementById("add-student-class").value = "";
+    document.getElementById("add-student-form").style.display = "none";
+    renderAll();
+  };
+
+  // Yeni öğretmen ekleme
+  document.getElementById("toggle-add-teacher").onclick = () => {
+    const box = document.getElementById("add-teacher-form");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+  };
+  document.getElementById("cancel-add-teacher").onclick = () => {
+    document.getElementById("add-teacher-form").style.display = "none";
+  };
+  document.getElementById("save-add-teacher").onclick = () => {
+    const name = document.getElementById("add-teacher-name").value.trim();
+    const branch = document.getElementById("add-teacher-branch").value.trim();
+    const roleType = document.getElementById("add-teacher-role").value || null;
+    const roleClass = document.getElementById("add-teacher-role-class").value.trim();
+    if (!name) {
+      alert("Öğretmen adı boş olamaz.");
+      return;
+    }
+    const maxId = teachers.reduce((max,t) => Math.max(max, t.id || 0), 0);
+    teachers.push({
+      id: maxId + 1,
+      name,
+      branch,
+      hasRole: !!roleType,
+      roleType,
+      roleClass
+    });
+    saveState();
+    document.getElementById("add-teacher-name").value = "";
+    document.getElementById("add-teacher-branch").value = "";
+    document.getElementById("add-teacher-role").value = "";
+    document.getElementById("add-teacher-role-class").value = "";
+    document.getElementById("add-teacher-form").style.display = "none";
+    renderAll();
+  };
+
+  // Görüşme formu
+  document.getElementById("cancel-meeting").onclick = () => {
+    document.getElementById("meeting-form-container").style.display = "none";
+    currentMeetingStudentId = null;
+    currentMeetingTeacherId = null;
+  };
+
+  document.getElementById("meeting-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!currentMeetingStudentId || !currentMeetingTeacherId) {
+      alert("Öğrenci ve öğretmen seçimi bulunamadı.");
+      return;
+    }
+    const date = document.getElementById("meeting-date").value;
+    const notes = document.getElementById("meeting-notes").value.trim();
+    const important = document.getElementById("meeting-important").checked;
+
+    const followUps = {};
+    ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
+      const el = document.getElementById("fu-"+k);
+      const needed = el && el.checked;
+      followUps[k] = { needed, done: false };
+    });
+
+    const id = Date.now();
+
+    meetings.push({
+      id,
+      date,
+      notes,
+      important,
+      studentId: currentMeetingStudentId,
+      teacherId: currentMeetingTeacherId,
+      followUps
+    });
+
+    saveState();
+    document.getElementById("meeting-form-container").style.display = "none";
+    currentMeetingStudentId = null;
+    currentMeetingTeacherId = null;
+
+    if (currentTeacherId) {
+      openTeacherDetail(currentTeacherId);
+    }
+    if (currentStudentId) {
+      openStudentDetail(currentStudentId);
+    }
+    renderFollowupList();
+  });
+});
+
+function renderAll() {
+  renderStudentClassPills();
+  renderStudentList();
+  renderTeacherList();
+  renderFollowupList();
+}
+
+// PWA: Service worker kaydı
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch((err) => {
+      console.error('Service worker kaydedilemedi:', err);
+    });
+  });
+}
+
+</script>
+
+<!-- Tema ayarları modalı -->
+<div class="theme-modal-backdrop" id="theme-modal">
+  <div class="theme-modal">
+    <div class="theme-modal-header">
+      <div class="theme-modal-title">Tema ayarları</div>
+      <button class="btn secondary sm" id="close-theme-modal">Kapat</button>
+    </div>
+    <div class="theme-modal-body">
+      <div class="small-text">
+        Bölümlerin kenarlık ve arka plan renklerini seç. Bu ayar sadece bu cihazda saklanır.
+      </div>
+      <div class="theme-grid">
+        <div class="field">
+          <label>Görüşmem Gereken Öğrenciler</label>
+          <input type="color" id="color-top-main">
+        </div>
+        <div class="field">
+          <label>Öğrenciler bölümü</label>
+          <input type="color" id="color-students-main">
+        </div>
+        <div class="field">
+          <label>Öğretmenler bölümü</label>
+          <input type="color" id="color-teachers-main">
+        </div>
+      </div>
+      <div class="small-text">
+        Dilediğinde tekrar bu pencereden renkleri değiştirebilirsin.
+      </div>
+      <div class="theme-modal-footer">
+        <button class="btn secondary sm" id="reset-theme">Varsayılan renkler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
