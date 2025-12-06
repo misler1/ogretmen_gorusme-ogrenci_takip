@@ -1,5 +1,6 @@
 {
   "name": "Öğretmen Görüşme ve Öğrenci Takip",
+  "description": "Öğretmen–öğrenci görüşmelerini, takip edilecek öğrencileri ve koçluk notlarını tek ekranda tutan takip sistemi.",
   "short_name": "Görüşme Sistemi",
   "start_url": "./ogretmen_ogrenci_pwa.html",
   "display": "standalone",
