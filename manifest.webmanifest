@@ -1,11 +1,13 @@
 {
-  "name": "Öğretmen Görüşme ve Öğrenci Takip",
+  "name": "Öğretmen Görüşme Sistemi",
+  "short_name": "Görüşme",
   "description": "Öğretmen–öğrenci görüşmelerini, takip edilecek öğrencileri ve koçluk notlarını tek ekranda tutan takip sistemi.",
-  "short_name": "Görüşme Sistemi",
-  "start_url": "./ogretmen_ogrenci_pwa.html",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f3f4f6",
-  "theme_color": "#2563eb",
+  "background_color": "#f7fafc",
+  "theme_color": "#4c6fff",
+  "lang": "tr-TR",
   "icons": [
     {
       "src": "icon-192.png",
