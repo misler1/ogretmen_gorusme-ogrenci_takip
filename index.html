@@ -2028,6 +2028,22 @@ if ('serviceWorker' in navigator) {
     </div>
   </div>
 </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = { 
+    apiKey: "AIzaSyBl_SRAk4j9jJqEwe9RCvmI_iXqal1Z-vI",
+    authDomain: "rehberlik-sistemi.firebaseapp.com",
+    projectId: "rehberlik-sistemi",
+    storageBucket: "rehberlik-sistemi.firebasestorage.app",
+    messagingSenderId: "376612659167",
+    appId: "1:376612659167:web:ffa97f33d10046a9642e6a"
+  };
+
+  window.firebaseApp = initializeApp(firebaseConfig);
+  window.db = getFirestore(firebaseApp);
+</script>
 
 </body>
 </html>
