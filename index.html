@@ -2029,6 +2029,13 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 <script type="module">
+  import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+(async () => {
+  const snap = await getDocs(collection(db, "students"));
+  console.log("Firestore students:", snap.docs.map(d => d.data()));
+})();
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
