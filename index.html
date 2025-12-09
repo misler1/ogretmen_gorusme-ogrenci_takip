@@ -799,6 +799,11 @@
                 <input type="date" id="meeting-date">
               </div>
               <div class="field">
+                <label>Takip bitirme tarihi</label>
+                <input type="date" id="followup-due-date">
+              </div>
+
+              <div class="field">
                 <label class="inline-checkbox">
                   <input type="checkbox" id="meeting-important">
                   <span>Takibe al (önemli konu)</span>
@@ -1941,6 +1946,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = document.getElementById("meeting-date").value;
     const notes = document.getElementById("meeting-notes").value.trim();
     const important = document.getElementById("meeting-important").checked;
+    const followUpDueDate =
+  document.getElementById("followup-due-date").value || null;
 
     const followUps = {};
     ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
@@ -1955,6 +1962,7 @@ document.addEventListener("DOMContentLoaded", () => {
       id,
       date,
       notes,
+      followUpDueDate,
       important,
       studentId: currentMeetingStudentId,
       teacherId: currentMeetingTeacherId,
