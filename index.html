@@ -2028,41 +2028,5 @@ if ('serviceWorker' in navigator) {
     </div>
   </div>
 </div>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { 
-    getFirestore, 
-    collection, 
-    getDocs 
-  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  const firebaseConfig = { 
-    apiKey: "AIzaSyBl_SRAk4j9jJqEwe9RCvmI_iXqal1Z-vI",
-    authDomain: "rehberlik-sistemi.firebaseapp.com",
-    projectId: "rehberlik-sistemi",
-    storageBucket: "rehberlik-sistemi.firebasestorage.app",
-    messagingSenderId: "376612659167",
-    appId: "1:376612659167:web:ffa97f33d10046a9642e6a"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
-
-  // İstersen global de dursun
-  window.firebaseApp = app;
-  window.db = db;
-
-  // Test: students koleksiyonunu oku
-  (async () => {
-    try {
-      const snap = await getDocs(collection(db, "students"));
-      console.log("Firestore students:", snap.docs.map(d => d.data()));
-    } catch (e) {
-      console.error("Buluttan veriler okunurken hata:", e);
-    }
-  })();
-</script>
-
-
 </body>
 </html>
