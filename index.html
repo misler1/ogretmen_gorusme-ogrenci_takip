@@ -924,10 +924,6 @@ function isDueOrOverdue(m) {
 }
 
 function saveStateLocalOnly() {
-  ...
-}
-
-function saveStateLocalOnly() {
   try {
     localStorage.setItem(LS_KEY_STUDENTS, JSON.stringify(students));
     localStorage.setItem(LS_KEY_TEACHERS, JSON.stringify(teachers));
