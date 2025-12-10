@@ -908,8 +908,24 @@ let currentTeacherClassFilter = null;
 let currentMeetingStudentId = null;
 let currentMeetingTeacherId = null;
 
+
 /* Yardımcılar */
 
+function isDueOrOverdue(m) {
+  if (!m.important || !m.followUpDueDate) return false;
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const due = new Date(m.followUpDueDate);
+  due.setHours(0,0,0,0);
+
+  return due <= today;
+}
+
+function saveStateLocalOnly() {
+  ...
+}
 
 function saveStateLocalOnly() {
   try {
