@@ -1973,6 +1973,20 @@ document.addEventListener("DOMContentLoaded", () => {
   //   };
   //   reader.readAsText(file, "utf-8");
   // });
+  // Genel takip kaydı (öğrenci ve öğretmen seçmeden form aç)
+const btnGeneral = document.getElementById("btn-add-general-followup");
+if (btnGeneral) {
+  btnGeneral.onclick = () => {
+    // Öğrenci ve öğretmen yok → genel kayıt
+    openMeetingForm(null, null);
+
+    // Form kartına kaydır (isteğe bağlı, güzel bir UX)
+    const cont = document.getElementById("meeting-form-container");
+    if (cont) {
+      cont.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+}
 
   // Yeni öğrenci ekleme
   document.getElementById("toggle-add-student").onclick = () => {
