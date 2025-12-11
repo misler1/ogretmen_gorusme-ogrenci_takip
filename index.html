@@ -1682,23 +1682,24 @@ function renderFollowupList() {
   empty.style.display = "none";
 
   list.forEach(m => {
-    const s = getStudentById(m.studentId);
-    const t = getTeacherById(m.teacherId);
-    const fu = m.followUps || {};
-    const dueAlert = isDueOrOverdue(m);
+   const s = getStudentById(m.studentId);
+const t = getTeacherById(m.teacherId);
+const titleText =
+  s ? s.name
+    : (t ? `Öğretmen: ${t.name}` : (m.customTitle || "Genel takip kaydı"));
 
-    const item = document.createElement("div");
-    item.className = "followup-item";
+const item = document.createElement("div");
+item.className = "followup-item";
 
-    const left = document.createElement("div");
-    left.innerHTML = `
-      <div class="followup-title">${s ? s.name : "-"}</div>
-      <div class="followup-sub">
-      ${formatDate(m.date)} • ${t ? t.name : "Öğretmen yok"}
-      ${dueAlert ? '<span class="badge danger">⚠ Süresi doldu</span>' : ''}
-      </div>
-      <div class="followup-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
-    `;
+const left = document.createElement("div");
+left.innerHTML = `
+  <div class="followup-title">${titleText}</div>
+  <div class="followup-sub">
+    ${formatDate(m.date)} • ${t ? t.name : (s ? "Öğretmen yok" : "Kayıt")}
+    ${dueAlert ? '<span class="badge danger">⚠ Süresi doldu</span>' : ''}
+  </div>
+  <div class="followup-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
+`;
 
     const mid = document.createElement("div");
     const stepsDiv = document.createElement("div");
@@ -1750,12 +1751,32 @@ function renderFollowupList() {
     };
 
     const btnGo = document.createElement("button");
-    btnGo.className = "btn secondary sm";
-    btnGo.textContent = "Öğrenci sayfası";
-    btnGo.onclick = () => {
-      if (s) openStudentDetail(s.id);
-      window.scrollTo({top:0, behavior:"smooth"});
-    };
+btnGo.className = "btn secondary sm";
+
+if (s) {
+  btnGo.textContent = "Öğrenci sayfası";
+  btnGo.onclick = () => {
+    openStudentDetail(s.id);
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+} else if (t) {
+  btnGo.textContent = "Öğretmen sayfası";
+  btnGo.onclick = () => {
+    openTeacherDetail(t.id);
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+} else {
+  btnGo.style.display = "none"; // öğrenci ve öğretmen yoksa gizle
+}
+
+right.appendChild(btnDone);
+right.appendChild(btnGo);
+
+item.appendChild(left);
+item.appendChild(mid);
+item.appendChild(right);
+cont.appendChild(item);
+
 
     right.appendChild(btnDone);
     right.appendChild(btnGo);
