@@ -1870,44 +1870,50 @@ document.addEventListener("DOMContentLoaded", () => {
     const u = document.getElementById("login-user").value.trim();
     const p = document.getElementById("login-pass").value.trim();
     const err = document.getElementById("login-error");
+
     if (u === LOGIN_USER && p === LOGIN_PASS) {
-    // localStorage.setItem(LS_KEY_LOGIN, "1"); // artık sürekli şifre sorulsun diye iptal edildi
-    document.getElementById("login-screen").style.display = "none";
-    document.getElementById("app-screen").style.display = "block";
-    // Önce yereldeki verileri yükle
-    loadState();
-    renderAll();
-    function showDueAlerts() {
-  const dueList = meetings.filter(isDueOrOverdue);
-  if (!dueList.length) return;
+      // localStorage.setItem(LS_KEY_LOGIN, "1"); // artık sürekli şifre sorulsun diye iptal edildi
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("app-screen").style.display = "block";
 
-  const names = dueList
-    .map(m => {
-      const s = getStudentById(m.studentId);
-      return s ? s.name : "Öğrenci";
-    })
-    .join(", ");
+      // Önce yereldeki verileri yükle
+      loadState();
+      renderAll();
 
-  alert(
-    "⚠ Takip süresi dolan öğrenciler:\n\n" + names
-  );
-}
+      // Takip süresi dolanlar için uyarı fonksiyonu
+      function showDueAlerts() {
+        const dueList = meetings.filter(isDueOrOverdue);
+        if (!dueList.length) return;
 
-    // Tema ayarlarını uygula ve kontrolleri bağla
-    applyThemeFromStorage();
-    initThemeControls();
-    // Firestore'dan gerçek zamanlı senkronizasyonu başlat
-    subscribeToCloudState();
-  } else {
+        const names = dueList
+          .map(m => {
+            const s = getStudentById(m.studentId);
+            return s ? s.name : "Öğrenci";
+          })
+          .join(", ");
+
+        alert("⚠ Takip süresi dolan öğrenciler:\n\n" + names);
+      }
+
+      // İstersen girişten sonra hemen çalışsın:
+      showDueAlerts();
+
+      // Tema ayarlarını uygula ve kontrolleri bağla
+      applyThemeFromStorage();
+      initThemeControls();
+
+      // Firestore'dan gerçek zamanlı senkronizasyonu başlat
+      subscribeToCloudState();
+    } else {
       err.style.display = "block";
     }
   });
 
-  // CSV yükleme butonları (devre dışı bırakıldı)
+  // CSV yükleme butonları (şu an devre dışı)
   // const studentFileInput = document.getElementById("student-file");
   // const teacherFileInput = document.getElementById("teacher-file");
   // document.getElementById("student-file-btn").onclick = () => studentFileInput.click();
-  // document.getElementById("teacher-file-btn").onclick = () => studentFileInput.click();
+  // document.getElementById("teacher-file-btn").onclick = () => teacherFileInput.click();
 
   // studentFileInput.addEventListener("change", (e) => {
   //   const file = e.target.files[0];
@@ -1934,24 +1940,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("add-student-form");
     box.style.display = box.style.display === "none" ? "block" : "none";
   };
+
   document.getElementById("cancel-add-student").onclick = () => {
     document.getElementById("add-student-form").style.display = "none";
   };
+
   document.getElementById("save-add-student").onclick = () => {
     const name = document.getElementById("add-student-name").value.trim();
     const gender = document.getElementById("add-student-gender").value;
     const cls = document.getElementById("add-student-class").value.trim();
+
     if (!name) {
       alert("Öğrenci adı boş olamaz.");
       return;
     }
-    const maxId = students.reduce((max,s) => Math.max(max, s.id || 0), 0);
+
+    const maxId = students.reduce((max, s) => Math.max(max, s.id || 0), 0);
     students.push({
       id: maxId + 1,
       name,
       gender,
       className: cls
     });
+
     saveState();
     document.getElementById("add-student-name").value = "";
     document.getElementById("add-student-gender").value = "";
@@ -1965,19 +1976,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("add-teacher-form");
     box.style.display = box.style.display === "none" ? "block" : "none";
   };
+
   document.getElementById("cancel-add-teacher").onclick = () => {
     document.getElementById("add-teacher-form").style.display = "none";
   };
+
   document.getElementById("save-add-teacher").onclick = () => {
     const name = document.getElementById("add-teacher-name").value.trim();
     const branch = document.getElementById("add-teacher-branch").value.trim();
     const roleType = document.getElementById("add-teacher-role").value || null;
     const roleClass = document.getElementById("add-teacher-role-class").value.trim();
+
     if (!name) {
       alert("Öğretmen adı boş olamaz.");
       return;
     }
-    const maxId = teachers.reduce((max,t) => Math.max(max, t.id || 0), 0);
+
+    const maxId = teachers.reduce((max, t) => Math.max(max, t.id || 0), 0);
     teachers.push({
       id: maxId + 1,
       name,
@@ -1986,6 +2001,7 @@ document.addEventListener("DOMContentLoaded", () => {
       roleType,
       roleClass
     });
+
     saveState();
     document.getElementById("add-teacher-name").value = "";
     document.getElementById("add-teacher-branch").value = "";
@@ -1995,80 +2011,81 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAll();
   };
 
-  // Görüşme formu
+  // Görüşme formu iptal
   document.getElementById("cancel-meeting").onclick = () => {
     document.getElementById("meeting-form-container").style.display = "none";
     currentMeetingStudentId = null;
     currentMeetingTeacherId = null;
   };
 
+  // Görüşme formu kaydet
   document.getElementById("meeting-form").addEventListener("submit", (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const titleInput = document.getElementById("meeting-title");
-  const dueInput   = document.getElementById("meeting-due-date");
-  const title = titleInput ? titleInput.value.trim() : "";
-  const due   = dueInput ? dueInput.value : null;
+    const titleInput = document.getElementById("meeting-title");
+    const dueInput   = document.getElementById("meeting-due-date");
+    const title = titleInput ? titleInput.value.trim() : "";
+    const due   = dueInput ? dueInput.value : null;
 
-  // Hiç öğrenci ve öğretmen seçilmemişse en azından bir başlık isteyelim
-  if (!currentMeetingStudentId && !currentMeetingTeacherId && !title) {
-    alert("Öğrenci / öğretmen seçmediysen en azından bir takip başlığı girmelisin.");
-    return;
-  }
+    // Hiç öğrenci ve öğretmen seçilmemişse en azından bir başlık isteyelim
+    if (!currentMeetingStudentId && !currentMeetingTeacherId && !title) {
+      alert("Öğrenci / öğretmen seçmediysen en azından bir takip başlığı girmelisin.");
+      return;
+    }
 
-  const date = document.getElementById("meeting-date").value;
-  const notes = document.getElementById("meeting-notes").value.trim();
-  const important = document.getElementById("meeting-important").checked;
+    const date = document.getElementById("meeting-date").value;
+    const notes = document.getElementById("meeting-notes").value.trim();
+    const important = document.getElementById("meeting-important").checked;
 
-  const followUps = {};
-  ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
-    const el = document.getElementById("fu-"+k);
-    const needed = el && el.checked;
-    followUps[k] = { needed, done: false };
+    const followUps = {};
+    ["ogrenci", "veli", "ogretmen", "idare", "diger"].forEach(k => {
+      const el = document.getElementById("fu-" + k);
+      const needed = el && el.checked;
+      followUps[k] = { needed, done: false };
+    });
+
+    const id = Date.now();
+
+    meetings.push({
+      id,
+      date,
+      notes,
+      important,
+      studentId: currentMeetingStudentId || null,
+      teacherId: currentMeetingTeacherId || null,
+      followUps,
+      customTitle: title || null,
+      followUpDueDate: due || null
+    });
+
+    saveState();
+    document.getElementById("meeting-form-container").style.display = "none";
+    currentMeetingStudentId = null;
+    currentMeetingTeacherId = null;
+
+    if (currentTeacherId) {
+      openTeacherDetail(currentTeacherId);
+    }
+    if (currentStudentId) {
+      openStudentDetail(currentStudentId);
+    }
+    renderFollowupList();
   });
 
-  const id = Date.now();
-
-  meetings.push({
-    id,
-    date,
-    notes,
-    important,
-    studentId: currentMeetingStudentId || null,
-    teacherId: currentMeetingTeacherId || null,
-    followUps,
-    customTitle: title || null,
-    followUpDueDate: due || null
-  });
-
-  saveState();
-  document.getElementById("meeting-form-container").style.display = "none";
-  currentMeetingStudentId = null;
-  currentMeetingTeacherId = null;
-
-  if (currentTeacherId) {
-    openTeacherDetail(currentTeacherId);
+  // BÜTÜN EKRANI YENİLEYEN FONKSİYON
+  function renderAll() {
+    renderStudentClassPills();
+    renderStudentList();
+    renderTeacherList();
+    renderFollowupList();
   }
-  if (currentStudentId) {
-    openStudentDetail(currentStudentId);
-  }
-  renderFollowupList();
-});
-
-
-function renderAll() {
-  renderStudentClassPills();
-  renderStudentList();
-  renderTeacherList();
-  renderFollowupList();
-}
 });
 
 // PWA: Service worker kaydı
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js').catch((err) => {
-      console.error('Service worker kaydedilemedi:', err);
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch((err) => {
+      console.error("Service worker kaydedilemedi:", err);
     });
   });
 }
