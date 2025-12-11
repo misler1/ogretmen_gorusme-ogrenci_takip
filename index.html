@@ -1241,6 +1241,11 @@ function openStudentDetail(studentId) {
       <div><span class="detail-label">Koç Öğretmen:</span> <span class="detail-value">${coachTeacher ? coachTeacher.name : "-"}</span></div>
       <div><span class="detail-label">Toplam Görüşme:</span> <span class="detail-value">${studentMeetings.length}</span></div>
     </div>
+    <div style="margin-top:8px; display:flex; justify-content:flex-end;">
+      <button class="btn sm" onclick="openMeetingForm(${studentId}, null); return false;">
+        Bu öğrenci için yeni kayıt
+      </button>
+    </div>
     <div class="divider"></div>
     <div class="small-text"><b>Görüşme geçmişi</b></div>
   `;
