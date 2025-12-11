@@ -1664,6 +1664,21 @@ function renderFollowupList() {
     empty.style.display = "block";
     return;
   }
+  function renderFollowupList() {
+  const cont = document.getElementById("followup-list");
+  const empty = document.getElementById("followup-empty");
+  cont.innerHTML = "";
+
+  if (!meetings.length) {
+    empty.style.display = "block";
+    return;
+  }
+
+  const fuLabelMap = {
+    ogrenci: "Öğrenci",
+    veli: "Veli",
+    ogretmen: "Öğretmen",
+    idare: "İdare",
 
   const fuLabelMap = {
     ogrenci: "Öğrenci",
@@ -1799,6 +1814,14 @@ function renderFollowupList() {
   });
 }
 
+    // BÜTÜN EKRANI YENİLEYEN FONKSİYON
+  function renderAll() {
+  renderStudentClassPills();
+  renderStudentList();
+  renderTeacherList();
+  renderFollowupList();
+}
+  
 /* OLAYLAR ve BAŞLATMA */
 
 
@@ -2124,14 +2147,7 @@ if (btnGeneral) {
     }
     renderFollowupList();
   });
-
-  // BÜTÜN EKRANI YENİLEYEN FONKSİYON
-  function renderAll() {
-    renderStudentClassPills();
-    renderStudentList();
-    renderTeacherList();
-    renderFollowupList();
-  }
+ 
 });
 
 // PWA: Service worker kaydı
