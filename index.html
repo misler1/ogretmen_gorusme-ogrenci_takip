@@ -1673,14 +1673,12 @@ function renderFollowupList() {
     diger: "Diğer"
   };
 
-  // Sadece önemli ve açık adımı olan kayıtlar
-  const list = meetings
-    .filter(m => {
-      if (!m.important) return false;
-      const fu = m.followUps || {};
-      return Object.values(fu).some(f => f.needed && !f.done);
-    })
-    .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+ 
+  // Sadece "Takibe al" işaretlenmiş kayıtlar
+    const list = meetings
+  .filter(m => m.important)
+  .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+
 
   if (!list.length) {
     empty.style.display = "block";
