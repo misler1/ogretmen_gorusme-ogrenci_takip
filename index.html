@@ -1844,6 +1844,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Önce yereldeki verileri yükle
     loadState();
     renderAll();
+    function showDueAlerts() {
+  const dueList = meetings.filter(isDueOrOverdue);
+  if (!dueList.length) return;
+
+  const names = dueList
+    .map(m => {
+      const s = getStudentById(m.studentId);
+      return s ? s.name : "Öğrenci";
+    })
+    .join(", ");
+
+  alert(
+    "⚠ Takip süresi dolan öğrenciler:\n\n" + names
+  );
+}
+
     // Tema ayarlarını uygula ve kontrolleri bağla
     applyThemeFromStorage();
     initThemeControls();
