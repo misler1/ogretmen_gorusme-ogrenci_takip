@@ -1546,7 +1546,7 @@ function openTeacherDetail(teacherId) {
     .slice()
     .sort((a,b) => (b.date || "").localeCompare(a.date || ""));
 
-  let html = `
+    let html = `
     <div class="detail-title">${t.name}</div>
     <div class="detail-subline">${getTeacherLabel(t) || "Öğretmen detayı"}</div>
     <div class="detail-grid">
@@ -1559,9 +1559,16 @@ function openTeacherDetail(teacherId) {
     <div id="teacher-student-section" class="mt-4"></div>
     <div id="teacher-coach-section" class="mt-4"></div>
 
+    <div style="margin-top:8px; display:flex; justify-content:flex-end;">
+      <button class="btn sm" onclick="openMeetingForm(null, ${teacherId}); return false;">
+        Bu öğretmen için yeni kayıt
+      </button>
+    </div>
+
     <div class="divider"></div>
     <div class="small-text"><b>Bu öğretmenle yapılan son görüşmeler</b></div>
   `;
+
 
   if (!tMeetings.length) {
     html += `<div class="small-text mt-4">Bu öğretmenle yapılmış kayıtlı bir görüşme yok.</div>`;
