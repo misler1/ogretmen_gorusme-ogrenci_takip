@@ -1631,6 +1631,7 @@ function renderFollowupList() {
     const s = getStudentById(m.studentId);
     const t = getTeacherById(m.teacherId);
     const fu = m.followUps || {};
+    const dueAlert = isDueOrOverdue(m);
 
     const item = document.createElement("div");
     item.className = "followup-item";
@@ -1638,7 +1639,10 @@ function renderFollowupList() {
     const left = document.createElement("div");
     left.innerHTML = `
       <div class="followup-title">${s ? s.name : "-"}</div>
-      <div class="followup-sub">${formatDate(m.date)} • ${t ? t.name : "Öğretmen yok"}</div>
+      <div class="followup-sub">
+      ${formatDate(m.date)} • ${t ? t.name : "Öğretmen yok"}
+      ${dueAlert ? '<span class="badge danger">⚠ Süresi doldu</span>' : ''}
+      </div>
       <div class="followup-notes">${(m.notes || "").replace(/\n/g,"<br>")}</div>
     `;
 
