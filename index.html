@@ -1998,51 +1998,58 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   document.getElementById("meeting-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!currentMeetingStudentId || !currentMeetingTeacherId) {
-      alert("Öğrenci ve öğretmen seçimi bulunamadı.");
-      return;
-    }
-    const date = document.getElementById("meeting-date").value;
-    const notes = document.getElementById("meeting-notes").value.trim();
-    const important = document.getElementById("meeting-important").checked;
-    const followUpDueDate =
-  document.getElementById("followup-due-date").value || null;
+  e.preventDefault();
 
-    const followUps = {};
-    ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
-      const el = document.getElementById("fu-"+k);
-      const needed = el && el.checked;
-      followUps[k] = { needed, done: false };
-    });
+  const titleInput = document.getElementById("meeting-title");
+  const dueInput   = document.getElementById("meeting-due-date");
+  const title = titleInput ? titleInput.value.trim() : "";
+  const due   = dueInput ? dueInput.value : null;
 
-    const id = Date.now();
+  // Hiç öğrenci ve öğretmen seçilmemişse en azından bir başlık isteyelim
+  if (!currentMeetingStudentId && !currentMeetingTeacherId && !title) {
+    alert("Öğrenci / öğretmen seçmediysen en azından bir takip başlığı girmelisin.");
+    return;
+  }
 
-    meetings.push({
-      id,
-      date,
-      notes,
-      followUpDueDate,
-      important,
-      studentId: currentMeetingStudentId,
-      teacherId: currentMeetingTeacherId,
-      followUps
-    });
+  const date = document.getElementById("meeting-date").value;
+  const notes = document.getElementById("meeting-notes").value.trim();
+  const important = document.getElementById("meeting-important").checked;
 
-    saveState();
-    document.getElementById("meeting-form-container").style.display = "none";
-    currentMeetingStudentId = null;
-    currentMeetingTeacherId = null;
-
-    if (currentTeacherId) {
-      openTeacherDetail(currentTeacherId);
-    }
-    if (currentStudentId) {
-      openStudentDetail(currentStudentId);
-    }
-    renderFollowupList();
+  const followUps = {};
+  ["ogrenci","veli","ogretmen","idare","diger"].forEach(k => {
+    const el = document.getElementById("fu-"+k);
+    const needed = el && el.checked;
+    followUps[k] = { needed, done: false };
   });
+
+  const id = Date.now();
+
+  meetings.push({
+    id,
+    date,
+    notes,
+    important,
+    studentId: currentMeetingStudentId || null,
+    teacherId: currentMeetingTeacherId || null,
+    followUps,
+    customTitle: title || null,
+    followUpDueDate: due || null
+  });
+
+  saveState();
+  document.getElementById("meeting-form-container").style.display = "none";
+  currentMeetingStudentId = null;
+  currentMeetingTeacherId = null;
+
+  if (currentTeacherId) {
+    openTeacherDetail(currentTeacherId);
+  }
+  if (currentStudentId) {
+    openStudentDetail(currentStudentId);
+  }
+  renderFollowupList();
 });
+
 
 function renderAll() {
   renderStudentClassPills();
