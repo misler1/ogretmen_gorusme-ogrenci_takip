@@ -1573,17 +1573,27 @@ function openTeacherDetail(teacherId) {
 /* GÖRÜŞME FORMU */
 
 function openMeetingForm(studentId, teacherId) {
-  currentMeetingStudentId = studentId;
-  currentMeetingTeacherId = teacherId;
+  currentMeetingStudentId = studentId || null;
+  currentMeetingTeacherId = teacherId || null;
 
-  const s = getStudentById(studentId);
-  const t = getTeacherById(teacherId);
+  const s = studentId ? getStudentById(studentId) : null;
+  const t = teacherId ? getTeacherById(teacherId) : null;
 
   const cont = document.getElementById("meeting-form-container");
   const titleEl = document.getElementById("meeting-form-title");
   cont.style.display = "block";
 
-  titleEl.textContent = `${t ? t.name : "-"} ↔ ${s ? s.name : "-"}`;
+  let titleText = "";
+  if (s && t) {
+    titleText = `${t.name} ↔ ${s.name}`;
+  } else if (s) {
+    titleText = `${s.name} için takip kaydı`;
+  } else if (t) {
+    titleText = `${t.name} için takip kaydı`;
+  } else {
+    titleText = "Genel takip kaydı";
+  }
+  titleEl.textContent = titleText;
 
   const dateInput = document.getElementById("meeting-date");
   if (!dateInput.value) {
@@ -1593,6 +1603,12 @@ function openMeetingForm(studentId, teacherId) {
     const d = String(today.getDate()).padStart(2,"0");
     dateInput.value = `${y}-${m}-${d}`;
   }
+
+  // Yeni eklediğimiz alanları da temizle
+  const titleInput = document.getElementById("meeting-title");
+  const dueInput   = document.getElementById("meeting-due-date");
+  if (titleInput) titleInput.value = "";
+  if (dueInput)   dueInput.value   = "";
 
   document.getElementById("meeting-notes").value = "";
   document.getElementById("meeting-important").checked = false;
