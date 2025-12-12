@@ -1655,15 +1655,6 @@ function openMeetingForm(studentId, teacherId) {
 
 /* TAKİP LİSTESİ */
 
-function renderFollowupList() {
-  const cont = document.getElementById("followup-list");
-  const empty = document.getElementById("followup-empty");
-  cont.innerHTML = "";
-
-  if (!meetings.length) {
-    empty.style.display = "block";
-    return;
-  }
   function renderFollowupList() {
   const cont = document.getElementById("followup-list");
   const empty = document.getElementById("followup-empty");
