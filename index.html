@@ -615,6 +615,142 @@
         align-items: flex-start;
       }
     }
+    /* --- UI Polish Pack (en alta ekle) --- */
+:root{
+  --bg: #f6f8fc;                 /* daha yumuşak arka plan */
+  --card: rgba(255,255,255,0.92);
+  --border: rgba(15,23,42,0.08);
+  --text: #0f172a;
+  --muted: #64748b;
+
+  --radius-xl: 18px;
+  --radius-lg: 14px;
+  --shadow-1: 0 10px 30px rgba(15,23,42,0.08);
+  --shadow-2: 0 16px 45px rgba(15,23,42,0.10);
+
+  --focus: 0 0 0 4px rgba(37,99,235,0.14);
+}
+
+body{
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(37,99,235,0.12), transparent 55%),
+    radial-gradient(900px 500px at 110% 10%, rgba(99,102,241,0.10), transparent 55%),
+    var(--bg);
+}
+
+.app-shell{
+  padding: 18px;
+}
+
+.card{
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(8px);
+}
+
+.header-title{
+  letter-spacing: -0.2px;
+}
+
+.header-sub{
+  max-width: 62ch;
+  line-height: 1.45;
+}
+
+.btn{
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(37,99,235,0.18);
+}
+
+.btn.sm{ padding: 6px 12px; }
+
+.btn.secondary{
+  background: rgba(255,255,255,0.7);
+  border: 1px solid var(--border);
+}
+
+.btn.secondary:hover{
+  background: rgba(255,255,255,0.95);
+}
+
+input[type="text"], input[type="date"], input[type="password"], select, textarea{
+  background: rgba(255,255,255,0.75);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+input:focus, select:focus, textarea:focus{
+  box-shadow: var(--focus);
+}
+
+.list{
+  max-height: 320px;
+}
+
+.list-item{
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 10px 12px;
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+
+.list-item:hover{
+  background: rgba(15,23,42,0.03);
+  border-color: rgba(15,23,42,0.08);
+  transform: translateY(-1px);
+}
+
+.list-item.active{
+  background: linear-gradient(135deg, rgba(37,99,235,0.14), rgba(255,255,255,0.75));
+  border-color: rgba(37,99,235,0.28);
+}
+
+.badge{
+  border-radius: 999px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: rgba(255,255,255,0.7);
+}
+
+.detail-card{
+  border-radius: 16px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: rgba(255,255,255,0.70);
+  box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+}
+
+.followup-item{
+  border-radius: 16px;
+  border: 1px solid rgba(15,23,42,0.08);
+  background: rgba(255,255,255,0.65);
+}
+
+.followup-notes{
+  line-height: 1.45;
+}
+
+.meeting-item{
+  border-radius: 14px;
+  border: 1px solid rgba(15,23,42,0.08);
+}
+
+.divider{
+  background: rgba(15,23,42,0.08);
+}
+
+/* scrollbar (Chrome/Edge) - daha temiz görünüm */
+*::-webkit-scrollbar{ width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb{
+  background: rgba(15,23,42,0.12);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.7);
+}
+*::-webkit-scrollbar-track{ background: transparent; }
+
   </style>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
