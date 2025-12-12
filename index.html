@@ -695,6 +695,69 @@
           <b>“Takibe al”</b> kutusunu işaretlersen burada görünecek.
         </div>
         <div id="followup-list" class="followup-list"></div>
+                <div id="meeting-form-container" class="detail-card" style="display:none;">
+          <div class="detail-title">Öğretmen–Öğrenci Görüşmesi Ekle</div>
+          <div class="detail-subline" id="meeting-form-title"></div>
+          <form id="meeting-form">
+            <div class="field-row">
+              <div class="field">
+                <label>Tarih</label>
+                <input type="date" id="meeting-date">
+              </div>
+              <div class="field">
+                <label>Takip bitirme tarihi</label>
+                
+              </div>
+
+              <div class="field">
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="meeting-important">
+                  <span>Takibe al (önemli konu)</span>
+                </label>
+              </div>
+            </div>
+            <div class="field">
+  <label>Takip başlığı (isteğe bağlı)</label>
+  <input type="text" id="meeting-title" placeholder="Örn: Sınıf içi davranış takibi">
+</div>
+
+<div class="field-row">
+  <div class="field">
+    <label>Takip bitiş tarihi (isteğe bağlı)</label>
+    <input type="date" id="meeting-due-date">
+  </div>
+</div>
+
+            <div class="field">
+              <label>Görüşme notu</label>
+              <textarea id="meeting-notes" placeholder="Örn: Öğretmen sosyal ilişkilerde zorlandığını belirtti, veli ile görüşülecek..."></textarea>
+            </div>
+            <div class="field">
+              <label>Bu öğrenciyle hangi paydaşlarla ayrıca çalışma / görüşme yapman gerekiyor?</label>
+              <div class="mt-4">
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-ogrenci"> Öğrenci
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-veli"> Veli
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-ogretmen"> Öğretmen
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-idare"> İdare
+                </label>
+                <label class="inline-checkbox">
+                  <input type="checkbox" id="fu-diger"> Diğer
+                </label>
+              </div>
+            </div>
+            <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:6px;">
+              <button type="button" class="btn secondary sm" id="cancel-meeting">Vazgeç</button>
+              <button type="submit" class="btn sm">Kaydet</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
@@ -792,70 +855,6 @@
         <ul id="teacher-list" class="list mt-4"></ul>
 
         <div id="teacher-detail" class="detail-card" style="display:none;"></div>
-
-        <div id="meeting-form-container" class="detail-card" style="display:none;">
-          <div class="detail-title">Öğretmen–Öğrenci Görüşmesi Ekle</div>
-          <div class="detail-subline" id="meeting-form-title"></div>
-          <form id="meeting-form">
-            <div class="field-row">
-              <div class="field">
-                <label>Tarih</label>
-                <input type="date" id="meeting-date">
-              </div>
-              <div class="field">
-                <label>Takip bitirme tarihi</label>
-                
-              </div>
-
-              <div class="field">
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="meeting-important">
-                  <span>Takibe al (önemli konu)</span>
-                </label>
-              </div>
-            </div>
-            <div class="field">
-  <label>Takip başlığı (isteğe bağlı)</label>
-  <input type="text" id="meeting-title" placeholder="Örn: Sınıf içi davranış takibi">
-</div>
-
-<div class="field-row">
-  <div class="field">
-    <label>Takip bitiş tarihi (isteğe bağlı)</label>
-    <input type="date" id="meeting-due-date">
-  </div>
-</div>
-
-            <div class="field">
-              <label>Görüşme notu</label>
-              <textarea id="meeting-notes" placeholder="Örn: Öğretmen sosyal ilişkilerde zorlandığını belirtti, veli ile görüşülecek..."></textarea>
-            </div>
-            <div class="field">
-              <label>Bu öğrenciyle hangi paydaşlarla ayrıca çalışma / görüşme yapman gerekiyor?</label>
-              <div class="mt-4">
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="fu-ogrenci"> Öğrenci
-                </label>
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="fu-veli"> Veli
-                </label>
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="fu-ogretmen"> Öğretmen
-                </label>
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="fu-idare"> İdare
-                </label>
-                <label class="inline-checkbox">
-                  <input type="checkbox" id="fu-diger"> Diğer
-                </label>
-              </div>
-            </div>
-            <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:6px;">
-              <button type="button" class="btn secondary sm" id="cancel-meeting">Vazgeç</button>
-              <button type="submit" class="btn sm">Kaydet</button>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
   </div>
