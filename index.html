@@ -1995,10 +1995,19 @@ if (btnGeneral) {
 }
 
   // Yeni öğrenci ekleme
-  document.getElementById("toggle-add-student").onclick = () => {
-    const box = document.getElementById("add-student-form");
-    box.style.display = box.style.display === "none" ? "block" : "none";
-  };
+    document.getElementById("toggle-add-student").onclick = () => {
+  const box = document.getElementById("add-student-form");
+  const isOpening = box.style.display === "none";
+
+  box.style.display = isOpening ? "block" : "none";
+
+  // Form açılıyorsa ekrana kaydır
+  if (isOpening) {
+    setTimeout(() => {
+      box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }
+};
 
   document.getElementById("cancel-add-student").onclick = () => {
     document.getElementById("add-student-form").style.display = "none";
@@ -2031,10 +2040,20 @@ if (btnGeneral) {
   };
 
   // Yeni öğretmen ekleme
-  document.getElementById("toggle-add-teacher").onclick = () => {
-    const box = document.getElementById("add-teacher-form");
-    box.style.display = box.style.display === "none" ? "block" : "none";
-  };
+   document.getElementById("toggle-add-teacher").onclick = () => {
+  const box = document.getElementById("add-teacher-form");
+  const isOpening = box.style.display === "none";
+
+  box.style.display = isOpening ? "block" : "none";
+
+  // Form açılıyorsa ekrana kaydır
+  if (isOpening) {
+    setTimeout(() => {
+      box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }
+};
+
 
   document.getElementById("cancel-add-teacher").onclick = () => {
     document.getElementById("add-teacher-form").style.display = "none";
