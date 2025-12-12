@@ -1625,15 +1625,13 @@ function openMeetingForm(studentId, teacherId) {
   titleEl.textContent = titleText;
 
   const dateInput = document.getElementById("meeting-date");
-  if (!dateInput.value) {
-    const today = new Date();
-    const y = today.getFullYear();
-    const m = String(today.getMonth() + 1).padStart(2,"0");
-    const d = String(today.getDate()).padStart(2,"0");
-    dateInput.value = `${y}-${m}-${d}`;
-  }
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth() + 1).padStart(2,"0");
+  const d = String(today.getDate()).padStart(2,"0");
+  // Her açılışta bugünün tarihi ile başlasın
+  dateInput.value = `${y}-${m}-${d}`;
 
-  // Yeni eklediğimiz alanları da temizle
   const titleInput = document.getElementById("meeting-title");
   const dueInput   = document.getElementById("meeting-due-date");
   if (titleInput) titleInput.value = "";
@@ -1646,7 +1644,10 @@ function openMeetingForm(studentId, teacherId) {
     if (el) el.checked = false;
   });
 
-  // Öğrenci detayı açık ise güncelle
+  // Formu ekranda görünür alana getir
+  cont.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Öğrenci detayı açıksa, veriyi de tazeleyelim (görüşme sayıları vs. için)
   if (currentStudentId === studentId) {
     openStudentDetail(studentId);
   }
