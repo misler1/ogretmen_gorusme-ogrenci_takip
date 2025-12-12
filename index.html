@@ -1655,7 +1655,7 @@ function openMeetingForm(studentId, teacherId) {
 
 /* TAKİP LİSTESİ */
 
-  function renderFollowupList() {
+function renderFollowupList() {
   const cont = document.getElementById("followup-list");
   const empty = document.getElementById("followup-empty");
   cont.innerHTML = "";
@@ -1665,7 +1665,7 @@ function openMeetingForm(studentId, teacherId) {
     return;
   }
 
-   const fuLabelMap = {
+  const fuLabelMap = {
     ogrenci: "Öğrenci",
     veli: "Veli",
     ogretmen: "Öğretmen",
@@ -1673,12 +1673,10 @@ function openMeetingForm(studentId, teacherId) {
     diger: "Diğer"
   };
 
- 
   // Sadece "Takibe al" işaretlenmiş kayıtlar
-    const list = meetings
-  .filter(m => m.important)
-  .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
-
+  const list = meetings
+    .filter(m => m.important)
+    .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
 
   if (!list.length) {
     empty.style.display = "block";
@@ -1799,14 +1797,14 @@ function openMeetingForm(studentId, teacherId) {
   });
 }
 
-    // BÜTÜN EKRANI YENİLEYEN FONKSİYON
-  function renderAll() {
+// BÜTÜN EKRANI YENİLEYEN FONKSİYON
+function renderAll() {
   renderStudentClassPills();
   renderStudentList();
   renderTeacherList();
   renderFollowupList();
 }
-  
+
 /* OLAYLAR ve BAŞLATMA */
 
 
